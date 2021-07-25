@@ -66,7 +66,6 @@ BOOL CtpobfDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 设置小图标
 
 	// TODO: 在此添加额外的初始化代码
-	
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
 
@@ -78,25 +77,32 @@ BOOL CtpobfDlg::OnInitDialog()
 
 void CtpobfDlg::OnPaint()
 {
-	
 	CPaintDC dc(this); // 用于绘制的设备上下文
 
 	CRect a(0, 0, 350, 350);
 	Sleep(25);
 	InvalidateRect(&a,0);  //0背景不重画  1背景重画  BOOLEAN值
-
+	CPaintDC dc(this); // 用于绘制的设备上下文
 	CMemoryDC* pDC = &m_dcBack;
 	dc.BitBlt(0, 0, pDC->GetWidth(), pDC->GetHeight(), pDC, 0, 0, SRCCOPY);
 	pDC = m_dcFlys + m_nIndex++;
 	m_nIndex %= FLYS_COUNT;
 	pDC->BitTrans(m_pos.x, m_pos.y, pDC->GetWidth(), pDC->GetHeight(), &dc, 0, 0, 0xFF00FF);
+
 	/***************************************************************************************************/
+
+
+	/****************************************************************************************************/
 	CRgn rgn1;
 	rgn1.CreateEllipticRgn(500, 500, 1000, 1000);//创建一个圆形区域
 	CRgn rgn2;
 	rgn2.CreateRectRgn(525, 575, 1000, 600);//创建一个矩形区域
 	//区域运算
 	rgn1.CombineRgn(&rgn1, &rgn2, RGN_DIFF);//两个区域进行逻辑运算
+
+
+	//绘制区域
+	//CClientDC dc(this);
 
 	CBrush brush1/*(HS_DIAGCROSS, RGB(100, 100, 100))*/;
 	dc.FillRgn(&rgn1, &brush1);//填充绘制
@@ -109,12 +115,15 @@ void CtpobfDlg::OnPaint()
 	brush2.DeleteObject();
 	/****************************************************************************************************/
 
-
 	//Sleep(25);
 	////Invalidate();
 	//RedrawWindow();
 
 	/****************************************************************************************************/
+
+	Sleep(30);
+	Invalidate(FALSE);
+
 }
 
 //当用户拖动最小化窗口时系统调用此函数取得光标
